@@ -24,4 +24,17 @@ void main() {
 
     expect(routes, containsAll([AppRoutes.home, AppRoutes.transactions]));
   });
+
+  test('registers nested add and edit routes', () {
+    final transactions = getIt<AppRouter>().router.configuration.routes
+        .whereType<GoRoute>()
+        .singleWhere((route) => route.path == AppRoutes.transactions);
+    final children = transactions.routes.whereType<GoRoute>().toList();
+
+    expect(
+      children.map((route) => route.path),
+      containsAll(['add', 'edit/:id']),
+    );
+    expect(AppRoutes.editTransaction('t1'), '/transactions/edit/t1');
+  });
 }

@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../../../app/router/app_routes.dart';
 import '../../../../core/di/injection.dart';
 import '../cubit/transaction_list_cubit.dart';
 import '../widgets/transaction_list_view.dart';
@@ -41,6 +43,12 @@ class _TransactionsPageState extends State<TransactionsPage> {
       child: Scaffold(
         appBar: AppBar(title: const Text('Transactions')),
         body: const TransactionListView(),
+        floatingActionButton: FloatingActionButton(
+          key: const Key('add-transaction-button'),
+          onPressed: () =>
+              context.go(AppRoutes.transactionAdd, extra: _cubit.refresh),
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }

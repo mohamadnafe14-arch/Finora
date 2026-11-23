@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../features/home/presentation/pages/home_page.dart';
+import '../../features/transactions/presentation/pages/transaction_form_page.dart';
 import '../../features/transactions/presentation/pages/transactions_page.dart';
 import 'app_routes.dart';
 
@@ -19,6 +20,20 @@ class AppRouter {
       GoRoute(
         path: AppRoutes.transactions,
         builder: (context, state) => const TransactionsPage(),
+        routes: [
+          GoRoute(
+            path: 'add',
+            builder: (context, state) =>
+                TransactionFormPage(onSaved: state.extra as void Function()?),
+          ),
+          GoRoute(
+            path: 'edit/:id',
+            builder: (context, state) => TransactionFormPage(
+              transactionId: state.pathParameters['id'],
+              onSaved: state.extra as void Function()?,
+            ),
+          ),
+        ],
       ),
     ],
   );
