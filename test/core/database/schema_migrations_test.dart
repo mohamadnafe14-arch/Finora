@@ -8,7 +8,7 @@ void main() {
   setUpAll(sqfliteFfiInit);
 
   test('schema version reflects every registered migration', () {
-    expect(DatabaseMigrator(schemaMigrations).schemaVersion, 3);
+    expect(DatabaseMigrator(schemaMigrations).schemaVersion, 4);
   });
 
   test('fresh database receives the categories table', () async {

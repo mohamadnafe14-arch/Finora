@@ -16,6 +16,14 @@ import 'package:finora/core/database/app_database.dart' as _i955;
 import 'package:finora/core/database/database_provider.dart' as _i982;
 import 'package:finora/core/di/database_module.dart' as _i878;
 import 'package:finora/core/utils/id_generator.dart' as _i26;
+import 'package:finora/features/budgets/data/datasources/budget_local_data_source.dart'
+    as _i947;
+import 'package:finora/features/budgets/data/datasources/sqflite_budget_local_data_source.dart'
+    as _i759;
+import 'package:finora/features/budgets/data/repositories/budget_repository.dart'
+    as _i683;
+import 'package:finora/features/budgets/data/repositories/budget_repository_impl.dart'
+    as _i1016;
 import 'package:finora/features/categories/data/datasources/category_local_data_source.dart'
     as _i506;
 import 'package:finora/features/categories/data/datasources/sqflite_category_local_data_source.dart'
@@ -63,9 +71,19 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i506.CategoryLocalDataSource>(
       () => _i833.SqfliteCategoryLocalDataSource(gh<_i982.DatabaseProvider>()),
     );
+    gh.lazySingleton<_i947.BudgetLocalDataSource>(
+      () => _i759.SqfliteBudgetLocalDataSource(gh<_i982.DatabaseProvider>()),
+    );
     gh.lazySingleton<_i939.CategoryRepository>(
       () => _i929.CategoryRepositoryImpl(
         gh<_i506.CategoryLocalDataSource>(),
+        gh<_i26.IdGenerator>(),
+      ),
+    );
+    gh.lazySingleton<_i683.BudgetRepository>(
+      () => _i1016.BudgetRepositoryImpl(
+        gh<_i947.BudgetLocalDataSource>(),
+        gh<_i939.CategoryRepository>(),
         gh<_i26.IdGenerator>(),
       ),
     );
