@@ -11,10 +11,12 @@ class TransactionListTile extends StatelessWidget {
     super.key,
     required this.transaction,
     required this.categoryName,
+    this.onTap,
   });
 
   final Transaction transaction;
   final String categoryName;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class TransactionListTile extends StatelessWidget {
 
     return ListTile(
       key: ValueKey('transaction-${transaction.id}'),
+      onTap: onTap,
       leading: CircleAvatar(
         child: Icon(income ? Icons.south_west : Icons.north_east),
       ),

@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../../../app/router/app_routes.dart';
 import '../cubit/transaction_list_cubit.dart';
 import '../cubit/transaction_list_state.dart';
 import 'transaction_filter_bar.dart';
@@ -53,6 +55,10 @@ class TransactionListView extends StatelessWidget {
           return TransactionListTile(
             transaction: transaction,
             categoryName: names[transaction.categoryId] ?? 'Unknown category',
+            onTap: () => context.go(
+              AppRoutes.editTransaction(transaction.id),
+              extra: cubit.refresh,
+            ),
           );
         },
       ),
