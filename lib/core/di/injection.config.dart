@@ -32,6 +32,8 @@ import 'package:finora/features/categories/data/repositories/category_repository
     as _i939;
 import 'package:finora/features/categories/data/repositories/category_repository_impl.dart'
     as _i929;
+import 'package:finora/features/categories/initialization/default_category_initializer.dart'
+    as _i561;
 import 'package:finora/features/home/presentation/cubit/home_cubit.dart'
     as _i808;
 import 'package:finora/features/transactions/data/datasources/sqflite_transaction_local_data_source.dart'
@@ -86,6 +88,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i939.CategoryRepository>(),
         gh<_i26.IdGenerator>(),
       ),
+    );
+    gh.factory<_i561.DefaultCategoryInitializer>(
+      () => _i561.DefaultCategoryInitializer(gh<_i939.CategoryRepository>()),
     );
     gh.lazySingleton<_i530.TransactionRepository>(
       () => _i251.TransactionRepositoryImpl(

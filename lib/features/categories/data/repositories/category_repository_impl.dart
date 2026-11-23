@@ -8,6 +8,7 @@ import '../../../../core/utils/finance_validators.dart';
 import '../../../../core/utils/id_generator.dart';
 import '../datasources/category_local_data_source.dart';
 import '../models/category.dart';
+import '../models/category_seed.dart';
 import 'category_repository.dart';
 
 /// Validating implementation of [CategoryRepository].
@@ -21,6 +22,23 @@ class CategoryRepositoryImpl implements CategoryRepository {
   @override
   Future<List<Category>> getAll({TransactionType? type}) =>
       _guard(() => _dataSource.getAll(type: type));
+
+  @override
+  Future<void> initializeDefaults(Iterable<CategorySeed> seeds) async {
+    final now = DateTime.now().toUtc();
+    final categories = seeds
+        .map(
+          (seed) => Category(
+            id: _idGenerator.newId(),
+            name: FinanceValidators.categoryName(seed.name),
+            type: seed.type,
+            createdAt: now,
+            updatedAt: now,
+          ),
+        )
+        .toList(growable: false);
+    await _guard(() => _dataSource.initializeDefaults(categories));
+  }
 
   @override
   Future<Category> getById(String id) async {

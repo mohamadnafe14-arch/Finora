@@ -27,6 +27,23 @@ class SqfliteCategoryLocalDataSource implements CategoryLocalDataSource {
   }
 
   @override
+  Future<void> initializeDefaults(Iterable<Category> categories) async {
+    final db = await _provider.database;
+    await db.transaction((txn) async {
+      final existing = await txn.query(
+        CategoriesTable.name,
+        columns: [CategoriesTable.columnId],
+        limit: 1,
+      );
+      if (existing.isNotEmpty) return;
+
+      for (final category in categories) {
+        await txn.insert(CategoriesTable.name, _toRow(category));
+      }
+    });
+  }
+
+  @override
   Future<Category?> getById(String id) async {
     final db = await _provider.database;
     final rows = await db.query(

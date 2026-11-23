@@ -6,6 +6,9 @@ abstract interface class CategoryLocalDataSource {
   /// Returns all categories, optionally filtered by [type].
   Future<List<Category>> getAll({TransactionType? type});
 
+  /// Inserts [categories] atomically when the table is empty.
+  Future<void> initializeDefaults(Iterable<Category> categories);
+
   /// Returns the category with [id], or `null` when absent.
   Future<Category?> getById(String id);
 
