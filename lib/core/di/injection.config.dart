@@ -44,6 +44,8 @@ import 'package:finora/features/transactions/data/repositories/transaction_repos
     as _i530;
 import 'package:finora/features/transactions/data/repositories/transaction_repository_impl.dart'
     as _i251;
+import 'package:finora/features/transactions/presentation/cubit/transaction_form_cubit.dart'
+    as _i484;
 import 'package:finora/features/transactions/presentation/cubit/transaction_list_cubit.dart'
     as _i970;
 import 'package:get_it/get_it.dart' as _i174;
@@ -103,6 +105,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i970.TransactionListCubit>(
       () => _i970.TransactionListCubit(
+        gh<_i530.TransactionRepository>(),
+        gh<_i939.CategoryRepository>(),
+      ),
+    );
+    gh.factory<_i484.TransactionFormCubit>(
+      () => _i484.TransactionFormCubit(
         gh<_i530.TransactionRepository>(),
         gh<_i939.CategoryRepository>(),
       ),
