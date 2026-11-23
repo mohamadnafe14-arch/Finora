@@ -34,6 +34,8 @@ class FakeCategoryRepository implements CategoryRepository {
   @override
   Future<Category> getById(String id) async {
     if (missing) throw NotFoundFailure('Missing category');
+    final existing = categories.where((item) => item.id == id);
+    if (existing.isNotEmpty) return existing.first;
     return Category(
       id: id,
       name: 'Category',

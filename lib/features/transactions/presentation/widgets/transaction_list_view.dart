@@ -56,7 +56,7 @@ class TransactionListView extends StatelessWidget {
             transaction: transaction,
             categoryName: names[transaction.categoryId] ?? 'Unknown category',
             onTap: () => context.go(
-              AppRoutes.editTransaction(transaction.id),
+              AppRoutes.transactionDetailsPath(transaction.id),
               extra: cubit.refresh,
             ),
           );
