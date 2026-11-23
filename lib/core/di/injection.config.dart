@@ -26,6 +26,14 @@ import 'package:finora/features/categories/data/repositories/category_repository
     as _i929;
 import 'package:finora/features/home/presentation/cubit/home_cubit.dart'
     as _i808;
+import 'package:finora/features/transactions/data/datasources/sqflite_transaction_local_data_source.dart'
+    as _i242;
+import 'package:finora/features/transactions/data/datasources/transaction_local_data_source.dart'
+    as _i950;
+import 'package:finora/features/transactions/data/repositories/transaction_repository.dart'
+    as _i530;
+import 'package:finora/features/transactions/data/repositories/transaction_repository_impl.dart'
+    as _i251;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:sqflite/sqflite.dart' as _i779;
@@ -48,12 +56,23 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i955.AppDatabase(gh<_i779.DatabaseFactory>()),
     );
     gh.lazySingleton<_i26.IdGenerator>(() => const _i26.UuidIdGenerator());
+    gh.lazySingleton<_i950.TransactionLocalDataSource>(
+      () =>
+          _i242.SqfliteTransactionLocalDataSource(gh<_i982.DatabaseProvider>()),
+    );
     gh.lazySingleton<_i506.CategoryLocalDataSource>(
       () => _i833.SqfliteCategoryLocalDataSource(gh<_i982.DatabaseProvider>()),
     );
     gh.lazySingleton<_i939.CategoryRepository>(
       () => _i929.CategoryRepositoryImpl(
         gh<_i506.CategoryLocalDataSource>(),
+        gh<_i26.IdGenerator>(),
+      ),
+    );
+    gh.lazySingleton<_i530.TransactionRepository>(
+      () => _i251.TransactionRepositoryImpl(
+        gh<_i950.TransactionLocalDataSource>(),
+        gh<_i939.CategoryRepository>(),
         gh<_i26.IdGenerator>(),
       ),
     );
