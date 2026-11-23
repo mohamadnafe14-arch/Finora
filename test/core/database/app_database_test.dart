@@ -1,4 +1,6 @@
 import 'package:finora/core/database/app_database.dart';
+import 'package:finora/core/database/database_migrator.dart';
+import 'package:finora/core/database/schema_migrations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -11,7 +13,10 @@ void main() {
     final db = await appDatabase.database;
 
     expect(db.isOpen, isTrue);
-    expect(await db.getVersion(), 1);
+    expect(
+      await db.getVersion(),
+      DatabaseMigrator(schemaMigrations).schemaVersion,
+    );
     await appDatabase.close();
   });
 
