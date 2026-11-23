@@ -1,5 +1,6 @@
 import 'database_migrator.dart';
 import 'tables/categories_table.dart';
+import 'tables/transactions_table.dart';
 
 /// Ordered schema migrations keyed by their target version.
 ///
@@ -9,4 +10,5 @@ import 'tables/categories_table.dart';
 final Map<int, MigrationStep> schemaMigrations = <int, MigrationStep>{
   1: (_) async {},
   2: createCategoriesTable,
+  3: createTransactionsTable,
 };
