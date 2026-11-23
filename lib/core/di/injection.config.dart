@@ -13,8 +13,17 @@
 import 'package:finora/app/router/app_router.dart' as _i559;
 import 'package:finora/core/config/app_config.dart' as _i870;
 import 'package:finora/core/database/app_database.dart' as _i955;
+import 'package:finora/core/database/database_provider.dart' as _i982;
 import 'package:finora/core/di/database_module.dart' as _i878;
 import 'package:finora/core/utils/id_generator.dart' as _i26;
+import 'package:finora/features/categories/data/datasources/category_local_data_source.dart'
+    as _i506;
+import 'package:finora/features/categories/data/datasources/sqflite_category_local_data_source.dart'
+    as _i833;
+import 'package:finora/features/categories/data/repositories/category_repository.dart'
+    as _i939;
+import 'package:finora/features/categories/data/repositories/category_repository_impl.dart'
+    as _i929;
 import 'package:finora/features/home/presentation/cubit/home_cubit.dart'
     as _i808;
 import 'package:get_it/get_it.dart' as _i174;
@@ -35,10 +44,19 @@ extension GetItInjectableX on _i174.GetIt {
       () => databaseModule.databaseFactory,
     );
     gh.factory<_i808.HomeCubit>(() => _i808.HomeCubit(gh<_i870.AppConfig>()));
-    gh.lazySingleton<_i955.AppDatabase>(
+    gh.lazySingleton<_i982.DatabaseProvider>(
       () => _i955.AppDatabase(gh<_i779.DatabaseFactory>()),
     );
     gh.lazySingleton<_i26.IdGenerator>(() => const _i26.UuidIdGenerator());
+    gh.lazySingleton<_i506.CategoryLocalDataSource>(
+      () => _i833.SqfliteCategoryLocalDataSource(gh<_i982.DatabaseProvider>()),
+    );
+    gh.lazySingleton<_i939.CategoryRepository>(
+      () => _i929.CategoryRepositoryImpl(
+        gh<_i506.CategoryLocalDataSource>(),
+        gh<_i26.IdGenerator>(),
+      ),
+    );
     return this;
   }
 }

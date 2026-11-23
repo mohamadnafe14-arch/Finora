@@ -3,10 +3,12 @@ import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
 import 'database_migrator.dart';
+import 'database_provider.dart';
+import 'schema_migrations.dart';
 
 /// Offline-first SQLite database of the application.
-@lazySingleton
-class AppDatabase {
+@LazySingleton(as: DatabaseProvider)
+class AppDatabase implements DatabaseProvider {
   /// Creates the database access with its platform factory.
   AppDatabase(this._factory);
 
@@ -14,11 +16,10 @@ class AppDatabase {
 
   Database? _database;
 
-  static final DatabaseMigrator _migrator = DatabaseMigrator({
-    1: _createInitialSchema,
-  });
+  static final DatabaseMigrator _migrator = DatabaseMigrator(schemaMigrations);
 
   /// Opens the database once and returns the shared instance.
+  @override
   Future<Database> get database async => _database ??= await _open();
 
   /// Closes the database, if open.
@@ -33,13 +34,13 @@ class AppDatabase {
       path,
       options: OpenDatabaseOptions(
         version: _migrator.schemaVersion,
+        onConfigure: (db) async {
+          await db.execute('PRAGMA foreign_keys = ON');
+        },
         onCreate: (db, _) => _migrator.onCreate(db),
         onUpgrade: (db, oldVersion, newVersion) =>
             _migrator.onUpgrade(db, oldVersion, newVersion),
       ),
     );
   }
-
-  /// Initial schema (v1). Feature tables are added by later milestones.
-  static Future<void> _createInitialSchema(Database db) async {}
 }
