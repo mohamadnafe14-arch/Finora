@@ -1,4 +1,5 @@
 import 'database_migrator.dart';
+import 'tables/budgets_table.dart';
 import 'tables/categories_table.dart';
 import 'tables/transactions_table.dart';
 
@@ -11,4 +12,5 @@ final Map<int, MigrationStep> schemaMigrations = <int, MigrationStep>{
   1: (_) async {},
   2: createCategoriesTable,
   3: createTransactionsTable,
+  4: createBudgetsTable,
 };
