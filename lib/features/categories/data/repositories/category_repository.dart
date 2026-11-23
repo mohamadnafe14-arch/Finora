@@ -1,10 +1,16 @@
 import '../../../../core/enums/transaction_type.dart';
 import '../models/category.dart';
+import '../models/category_seed.dart';
 
 /// Application-facing operations for categories.
 abstract interface class CategoryRepository {
   /// Returns all categories, optionally filtered by [type].
   Future<List<Category>> getAll({TransactionType? type});
+
+  /// Atomically seeds [seeds] when the category table is empty.
+  ///
+  /// Existing categories are never updated, deleted, or overwritten.
+  Future<void> initializeDefaults(Iterable<CategorySeed> seeds);
 
   /// Returns the category with [id] or throws a not-found failure.
   Future<Category> getById(String id);

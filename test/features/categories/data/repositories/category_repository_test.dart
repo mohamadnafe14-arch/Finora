@@ -116,6 +116,13 @@ class FakeCategoryDataSource implements CategoryLocalDataSource {
   }
 
   @override
+  Future<void> initializeDefaults(Iterable<Category> categories) async {
+    _throwIfConfigured();
+    if (items.isNotEmpty) return;
+    items.addAll(categories);
+  }
+
+  @override
   Future<Category?> getById(String id) async {
     _throwIfConfigured();
     for (final item in items) {
