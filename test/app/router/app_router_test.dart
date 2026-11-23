@@ -33,8 +33,9 @@ void main() {
 
     expect(
       children.map((route) => route.path),
-      containsAll(['add', 'edit/:id']),
+      containsAll(['add', 'edit/:id', 'details/:id']),
     );
     expect(AppRoutes.editTransaction('t1'), '/transactions/edit/t1');
+    expect(AppRoutes.transactionDetailsPath('t1'), '/transactions/details/t1');
   });
 }

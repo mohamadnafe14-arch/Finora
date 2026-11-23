@@ -18,6 +18,8 @@ class FakeTransactionRepository implements TransactionRepository {
   Object? getByIdError;
   Object? createError;
   Object? updateError;
+  Object? deleteError;
+  int deleteCalls = 0;
 
   @override
   Future<List<Transaction>> getAll({TransactionQuery? query}) async {
@@ -105,8 +107,12 @@ class FakeTransactionRepository implements TransactionRepository {
   }
 
   @override
-  Future<void> delete(String id) =>
-      throw UnimplementedError('delete is not needed by this test.');
+  Future<void> delete(String id) async {
+    deleteCalls++;
+    final error = deleteError;
+    if (error != null) throw error;
+    items.removeWhere((transaction) => transaction.id == id);
+  }
 
   @override
   Future<int> sumByCategoryAndPeriod(String categoryId, String period) =>
