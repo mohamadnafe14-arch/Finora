@@ -11,6 +11,7 @@ class FakeCategoryRepository implements CategoryRepository {
   final TransactionType type;
   bool missing = false;
   List<Category> categories = const [];
+  Object? getAllError;
   int initializeCalls = 0;
   int updateCalls = 0;
   int deleteCalls = 0;
@@ -18,6 +19,8 @@ class FakeCategoryRepository implements CategoryRepository {
 
   @override
   Future<List<Category>> getAll({TransactionType? type}) async {
+    final error = getAllError;
+    if (error != null) throw error;
     if (type == null) return categories;
     return categories.where((category) => category.type == type).toList();
   }

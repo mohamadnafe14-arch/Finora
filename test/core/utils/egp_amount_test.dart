@@ -52,6 +52,11 @@ void main() {
       expect(EgpAmount.format(100000), 'EGP 1000.00');
     });
 
+    test('formats raw values for form fields', () {
+      expect(EgpAmount.formatValue(1250), '12.50');
+      expect(EgpAmount.formatValue(5), '0.05');
+    });
+
     test('round-trips valid amounts', () {
       for (final amount in <int>[1, 50, 1250, 999999]) {
         expect(EgpAmount.parse(EgpAmount.format(amount).substring(4)), amount);

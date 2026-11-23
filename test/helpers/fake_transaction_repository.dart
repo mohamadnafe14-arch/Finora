@@ -6,13 +6,18 @@ import 'package:finora/features/transactions/data/repositories/transaction_repos
 /// In-memory [TransactionRepository] for presentation tests.
 class FakeTransactionRepository implements TransactionRepository {
   FakeTransactionRepository([List<Transaction> transactions = const []]) {
-    items = List.unmodifiable(transactions);
+    items = List.of(transactions);
   }
 
   List<Transaction> items = const [];
   int getAllCalls = 0;
+  int createCalls = 0;
+  int updateCalls = 0;
   TransactionQuery? lastQuery;
   Object? getAllError;
+  Object? getByIdError;
+  Object? createError;
+  Object? updateError;
 
   @override
   Future<List<Transaction>> getAll({TransactionQuery? query}) async {
@@ -38,8 +43,11 @@ class FakeTransactionRepository implements TransactionRepository {
   }
 
   @override
-  Future<Transaction> getById(String id) =>
-      throw UnimplementedError('getById is not needed by this test.');
+  Future<Transaction> getById(String id) async {
+    final error = getByIdError;
+    if (error != null) throw error;
+    return items.firstWhere((transaction) => transaction.id == id);
+  }
 
   @override
   Future<Transaction> create({
@@ -48,7 +56,24 @@ class FakeTransactionRepository implements TransactionRepository {
     required int amountMinor,
     String? note,
     required DateTime date,
-  }) => throw UnimplementedError('create is not needed by this test.');
+  }) async {
+    createCalls++;
+    final error = createError;
+    if (error != null) throw error;
+    final now = DateTime.now().toUtc();
+    final transaction = Transaction(
+      id: 'created-$createCalls',
+      categoryId: categoryId,
+      type: type,
+      amountMinor: amountMinor,
+      note: note,
+      date: date,
+      createdAt: now,
+      updatedAt: now,
+    );
+    items.add(transaction);
+    return transaction;
+  }
 
   @override
   Future<Transaction> update({
@@ -58,7 +83,26 @@ class FakeTransactionRepository implements TransactionRepository {
     required int amountMinor,
     String? note,
     required DateTime date,
-  }) => throw UnimplementedError('update is not needed by this test.');
+  }) async {
+    updateCalls++;
+    final error = updateError;
+    if (error != null) throw error;
+    final index = items.indexWhere((transaction) => transaction.id == id);
+    if (index == -1) throw StateError('Transaction not found: $id');
+    final current = items[index];
+    final updated = Transaction(
+      id: id,
+      categoryId: categoryId,
+      type: type,
+      amountMinor: amountMinor,
+      note: note,
+      date: date,
+      createdAt: current.createdAt,
+      updatedAt: DateTime.now().toUtc(),
+    );
+    items[index] = updated;
+    return updated;
+  }
 
   @override
   Future<void> delete(String id) =>

@@ -29,12 +29,15 @@ abstract final class EgpAmount {
     return amount;
   }
 
-  /// Formats [amountMinor] as an EGP string with two decimal places.
-  static String format(int amountMinor) {
+  /// Formats [amountMinor] as a decimal value with two places.
+  static String formatValue(int amountMinor) {
     final sign = amountMinor < 0 ? '-' : '';
     final absolute = amountMinor.abs();
     final pounds = absolute ~/ 100;
     final piastres = (absolute % 100).toString().padLeft(2, '0');
-    return 'EGP $sign$pounds.$piastres';
+    return '$sign$pounds.$piastres';
   }
+
+  /// Formats [amountMinor] as an EGP string with two decimal places.
+  static String format(int amountMinor) => 'EGP ${formatValue(amountMinor)}';
 }
