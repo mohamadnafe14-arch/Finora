@@ -10,13 +10,17 @@ class FakeCategoryRepository implements CategoryRepository {
 
   final TransactionType type;
   bool missing = false;
+  List<Category> categories = const [];
   int initializeCalls = 0;
   int updateCalls = 0;
   int deleteCalls = 0;
   List<CategorySeed> initializedSeeds = const [];
 
   @override
-  Future<List<Category>> getAll({TransactionType? type}) async => <Category>[];
+  Future<List<Category>> getAll({TransactionType? type}) async {
+    if (type == null) return categories;
+    return categories.where((category) => category.type == type).toList();
+  }
 
   @override
   Future<void> initializeDefaults(Iterable<CategorySeed> seeds) async {
