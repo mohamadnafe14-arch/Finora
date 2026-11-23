@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../../../../app/router/app_routes.dart';
 import '../../../../core/di/injection.dart';
 import '../cubit/home_cubit.dart';
 import '../cubit/home_state.dart';
@@ -30,7 +32,20 @@ class _HomeView extends StatelessWidget {
           builder: (context, state) => Text(state.appName),
         ),
       ),
-      body: const Center(child: Text('Your finances, offline-first.')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Your finances, offline-first.'),
+            const SizedBox(height: 16),
+            FilledButton.icon(
+              onPressed: () => context.go(AppRoutes.transactions),
+              icon: const Icon(Icons.list_alt),
+              label: const Text('View transactions'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
